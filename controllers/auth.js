@@ -6,7 +6,7 @@ const fs = require("fs/promises");
 
 const { User } = require("../models/user");
 
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { HttpError, ctrlWrapper, modifyAvatar } = require("../helpers");
 
 const { SECRET_KEY } = process.env;
 
@@ -82,6 +82,7 @@ const updateAvatar = async (req, res) => {
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarDir, filename);
 
+  await modifyAvatar(tempUpload); 
   await fs.rename(tempUpload, resultUpload);
   const avaratUrl = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avaratUrl });
